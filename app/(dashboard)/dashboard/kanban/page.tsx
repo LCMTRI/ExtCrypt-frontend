@@ -1,5 +1,4 @@
 import BreadCrumb from "@/components/breadcrumb";
-import { KanbanBoard } from "@/components/kanban/kanban-board";
 import NewTaskDialog from "@/components/kanban/new-task-dialog";
 import { Heading } from "@/components/ui/heading";
 
@@ -13,7 +12,7 @@ export default function page() {
           <Heading title={`Kanban`} description="Manage tasks by dnd" />
           <NewTaskDialog />
         </div>
-        <KanbanBoard />
+        {/* <KanbanBoard /> */}
       </div>
     </>
   );
