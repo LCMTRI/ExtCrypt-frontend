@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -18,11 +17,14 @@ import {
   REQUIRED_INPUT_MSG,
 } from "@/constants/constants";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { InferType, object, string } from "yup";
 import { Textarea } from "../ui/textarea";
 // import { z } from "zod";
+
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const formSchema = object({
   name: string().required(REQUIRED_INPUT_MSG).max(100, INPUT_MAX_LENGTH_100),
@@ -34,6 +36,7 @@ const formSchema = object({
     .required(REQUIRED_INPUT_MSG)
     .max(1000, INPUT_MAX_LENGTH_1000),
   phoneNo: string()
+    .matches(phoneRegExp, FALSE_PHONE_NUMBER_MSG)
     .required(REQUIRED_INPUT_MSG)
     .max(20, FALSE_PHONE_NUMBER_MSG),
 
@@ -75,10 +78,10 @@ const ContactForm = () => {
                 <FormControl>
                   <Input
                     type="name"
-                    placeholder="Your name*"
+                    placeholder="Your name *"
                     disabled={loading}
                     // style={{ height: "3rem", font }}
-                    className=" h-12 text-md focus:outline-none active:outline-none"
+                    className="font-semibold h-12 p-4 text-md focus:outline-none active:outline-none border-0 bg-foreground/10"
                     {...field}
                   />
                 </FormControl>
@@ -95,10 +98,10 @@ const ContactForm = () => {
                 <FormControl>
                   <Input
                     type="text"
-                    placeholder="Your email*"
+                    placeholder="Your email *"
                     disabled={loading}
                     // style={{ height: "3rem", font }}
-                    className=" h-12 text-md focus:outline-none active:outline-none"
+                    className="font-semibold h-12 p-4 text-md focus:outline-none active:outline-none border-0 bg-foreground/10"
                     {...field}
                   />
                 </FormControl>
@@ -114,10 +117,10 @@ const ContactForm = () => {
                 {/* <FormLabel>Question/Feedback</FormLabel> */}
                 <FormControl>
                   <Textarea
-                    placeholder="Messages, questions or feedbacks*"
+                    placeholder="Messages, questions or feedbacks *"
                     disabled={loading}
                     // style={{ height: "3rem", font }}
-                    className="h-64 text-md focus:outline-none active:outline-none"
+                    className="font-semibold h-64 p-4 text-md focus:outline-none active:outline-none border-0 bg-foreground/10"
                     {...field}
                   />
                 </FormControl>
@@ -134,10 +137,10 @@ const ContactForm = () => {
                 <FormControl>
                   <Input
                     type="tel"
-                    placeholder="Phone number*"
+                    placeholder="Phone number *"
                     disabled={loading}
                     // style={{ height: "3rem", font }}
-                    className=" h-12 text-md focus:outline-none active:outline-none"
+                    className="placeholder:font-semibold h-12 p-4 text-md focus:outline-none active:outline-none border-0 bg-foreground/10"
                     {...field}
                   />
                 </FormControl>
@@ -149,7 +152,7 @@ const ContactForm = () => {
 
           <Button
             disabled={loading}
-            className="sm:col-span-1 bg-cyan-600/80 text-foreground hover:bg-cyan-700/70"
+            className="sm:col-span-1 font-semibold bg-cyan-500/80 text-foreground text-base hover:bg-cyan-700/70"
             type="submit"
           >
             Send

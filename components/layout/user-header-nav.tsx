@@ -32,9 +32,9 @@ const links: Links[] = [
   },
   {
     name: "Subscription",
-    slug: "/huhu",
+    slug: "/subscription",
     icon: <Icons.arrowLeft className="mr-2 h-4 w-4" />,
-    disabled: true,
+    // disabled: true,
   },
 ];
 
