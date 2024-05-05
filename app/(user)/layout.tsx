@@ -1,6 +1,4 @@
 // import Header from "@/components/layout/header";
-import { ScrollToTopButton } from "@/components/buttons";
-import Sidebar from "@/components/layout/sidebar";
 import UserFooter from "@/components/layout/user-footer";
 import UserHeader from "@/components/layout/user-header";
 import type { Metadata } from "next";
