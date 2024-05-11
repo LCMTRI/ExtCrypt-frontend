@@ -1,36 +1,31 @@
 "use client";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { InferType, mixed, object, string } from "yup";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { InferType, boolean, mixed, object, string } from "yup";
 import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-
-// const maskAddressRegex = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/;
-const maskAddressRegex = "^((25[0-5]|(2[0-4]|1d|[1-9]|)d).?\b){4}$";
+import { Checkbox } from "../ui/checkbox";
+import axios from "axios";
 
 const formSchema = object({
-  maskAddress: string(),
+  maskAddress: boolean(),
   // .matches(maskAddressRegex, "Invalid mask address!")
   // .notRequired(),
-  volumeSerial: string(),
-  cpuId: string(),
-  biosDate: string(),
-  deviceName: string(),
+  volumeSerial: boolean(),
+  cpuId: boolean(),
+  biosDate: boolean(),
+  deviceName: boolean(),
   // .matches(phoneRegExp, FALSE_PHONE_NUMBER_MSG),
   zipFile: mixed<File>()
     .required("You have to provide your source code!")
@@ -47,14 +42,46 @@ type OptionSchema = InferType<typeof formSchema>;
 
 const OptionForm = () => {
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = React.useState<Date>();
-  const [step, setStep] = React.useState(0);
+  const formRef = useRef<HTMLFormElement>(null);
+
   const form = useForm<OptionSchema>({
     resolver: yupResolver(formSchema),
   });
 
   const onSubmit = async (data: OptionSchema) => {
-    console.log("data: ", data);
+    // const result: {
+    //   bitStr: string;
+    //   zipFile: File;
+    // } = {
+    //   bitStr: "",
+    //   zipFile: data.zipFile,
+    // };
+
+    const result = new FormData();
+    let bitStr = "";
+
+    result.append("files", data.zipFile);
+    bitStr += data.biosDate ? "1" : "0";
+    bitStr += data.volumeSerial ? "1" : "0";
+    bitStr += data.cpuId ? "1" : "0";
+    bitStr += data.biosDate ? "1" : "0";
+    bitStr += data.deviceName ? "1" : "0";
+    result.append("values", bitStr);
+    const { data: res } = await axios.post(
+      "http://localhost:8000/form",
+      result,
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "http://localhost:8000",
+        },
+      },
+    );
+    // const res = await axios.get("http://localhost:8000/health-check", {
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    // });
+    console.log("result: ", res);
   };
 
   // const {
@@ -63,49 +90,47 @@ const OptionForm = () => {
   //   getErrorMessage,
   // } = useFormContact();
   return (
-    <div className="">
-      <h1 className="font-semibold text-2xl mb-2">
-        {step === 0 ? "Options" : "Upload Source Code"}
-      </h1>
-      <div className="mb-8">
-        {step === 0 ? (
-          <span className="font-light text-base">
-            Enter optional informations to create a more secure key.
-          </span>
-        ) : (
-          <span className="font-light text-base">
-            Please compress your project file/folder to a{" "}
-            <span className="font-semibold">.zip</span> file.
-          </span>
-        )}
-      </div>
+    <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div
-            className={`max-w-screen flex flex-col gap-5 ${
-              step === 0 ? "" : "hidden"
-            }`}
-          >
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          ref={formRef}
+          encType="multipart/form-data"
+        >
+          <div className="max-w-screen flex flex-col gap-5 mb-12">
+            <div>
+              <h1 className="font-semibold text-2xl mb-2">1. Options</h1>
+              <span className="font-light text-base mb-8">
+                Enter optional informations to create a more secure key.
+              </span>
+            </div>
+
             <FormField
               control={form.control}
               name="maskAddress"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    Mask Address{" "}
-                    <span className="text-foreground/50">(Optional)</span>:
-                  </FormLabel>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ex: 255.0.0.0"
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                       disabled={loading}
-                      className="px-4 py-5"
-                      pattern={maskAddressRegex}
-                      {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="text-base space-y-2 leading-none">
+                    {/* <FormLabel className="space-y-1 leading-none"> */}
+                    <FormLabel className="text-[17px]">
+                      Mask Address{" "}
+                      <span className="text-foreground/50">(Optional)</span>
+                    </FormLabel>
+                    <FormDescription className="text-[15px] leading-5">
+                      You can manage your mobile notifications in the{" "}
+                      <span className="hover:underline cursor-pointer underline-offset-2">
+                        mobile settings
+                      </span>{" "}
+                      page.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -113,21 +138,27 @@ const OptionForm = () => {
               control={form.control}
               name="volumeSerial"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    Volume Serial{" "}
-                    <span className="text-foreground/50">(Optional)</span>:
-                  </FormLabel>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ex: 06D4-EEBD"
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                       disabled={loading}
-                      className="px-4 py-5"
-                      {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="text-base space-y-1 leading-none">
+                    <FormLabel className="text-[17px]">
+                      Volume Serial{" "}
+                      <span className="text-foreground/50">(Optional)</span>
+                    </FormLabel>
+                    <FormDescription className="text-[15px] leading-5">
+                      You can manage your mobile notifications in the{" "}
+                      <span className="hover:underline cursor-pointer underline-offset-2">
+                        mobile settings
+                      </span>{" "}
+                      page.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -135,21 +166,27 @@ const OptionForm = () => {
               control={form.control}
               name="cpuId"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    CPU Id{" "}
-                    <span className="text-foreground/50">(Optional)</span>:
-                  </FormLabel>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ex: ..."
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                       disabled={loading}
-                      className="px-4 py-5"
-                      {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="text-base space-y-1 leading-none">
+                    <FormLabel className="text-[17px]">
+                      CPU Id{" "}
+                      <span className="text-foreground/50">(Optional)</span>
+                    </FormLabel>
+                    <FormDescription className="text-[15px] leading-5">
+                      You can manage your mobile notifications in the{" "}
+                      <span className="hover:underline cursor-pointer underline-offset-2">
+                        mobile settings
+                      </span>{" "}
+                      page.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -157,41 +194,27 @@ const OptionForm = () => {
               control={form.control}
               name="biosDate"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    BIOS Activate Date{" "}
-                    <span className="text-foreground/50">(Optional)</span>:
-                  </FormLabel>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
-                    {/* <Calendar/> */}
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground",
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? (
-                            format(date, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={loading}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div className="text-base space-y-1 leading-none">
+                    <FormLabel className="text-[17px]">
+                      BIOS Activate Date{" "}
+                      <span className="text-foreground/50">(Optional)</span>
+                    </FormLabel>
+                    <FormDescription className="text-[15px] leading-5">
+                      You can manage your mobile notifications in the{" "}
+                      <span className="hover:underline cursor-pointer underline-offset-2">
+                        mobile settings
+                      </span>{" "}
+                      page.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -199,27 +222,40 @@ const OptionForm = () => {
               control={form.control}
               name="deviceName"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    Device Name{" "}
-                    <span className="text-foreground/50">(Optional)</span>:
-                  </FormLabel>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Ex: DESKTOP-7A6HRSI"
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                       disabled={loading}
-                      className="px-4 py-5"
-                      {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="text-base space-y-1 leading-none">
+                    <FormLabel className="text-[17px]">
+                      Device Name{" "}
+                      <span className="text-foreground/50">(Optional)</span>
+                    </FormLabel>
+                    <FormDescription className="text-[15px] leading-5">
+                      You can manage your mobile notifications in the{" "}
+                      <span className="hover:underline cursor-pointer underline-offset-2">
+                        mobile settings
+                      </span>{" "}
+                      page.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
           </div>
 
-          <div className={`${step === 1 ? "" : "hidden"} h-[482px]`}>
+          <div>
+            <h1 className="font-semibold text-2xl mb-2">
+              2. Upload Source Code
+            </h1>
+            <div className="font-light text-base mb-8">
+              Please compress your project file/folder to a{" "}
+              <span className="font-semibold">.zip</span> file.
+            </div>
             <FormField
               control={form.control}
               name="zipFile"
@@ -246,46 +282,12 @@ const OptionForm = () => {
             />
           </div>
 
-          <div className="w-full flex justify-end gap-2 mt-5">
-            <Button
-              disabled={loading}
-              variant="outline"
-              className={`px-8 border-cyan-500/70 text-foreground text-base hover:bg-cyan-500/10 ${
-                step === 1 ? "hidden" : ""
-              }`}
-              type="button"
-              onClick={() => setStep(1)}
-            >
-              Next
-            </Button>
-            {/* <Button
-              disabled={loading}
-              variant="outline"
-              className={`px-8 border-cyan-500/70 text-foreground text-base hover:bg-cyan-500/10 ${
-                step === 1 ? "hidden" : ""
-              }`}
-              onClick={() => setStep(0)}
-            >
-              Test
-            </Button> */}
-            <Button
-              disabled={loading}
-              variant="outline"
-              className={`px-8 border-cyan-500/70 text-foreground text-base hover:bg-cyan-500/10 ${
-                step === 0 ? "hidden" : ""
-              }`}
-              onClick={() => setStep(0)}
-              type="button"
-            >
-              Back
-            </Button>
+          <div className="w-full flex justify-end mt-5">
             <Button
               disabled={
                 loading || !form.formState.isDirty || !form.formState.isValid
               }
-              className={`px-8 bg-cyan-500/50 text-foreground text-base hover:bg-cyan-700/70 ${
-                step === 0 ? "hidden" : ""
-              }`}
+              className="px-8 bg-cyan-500/50 text-foreground text-base hover:bg-cyan-700/70"
               type="submit"
             >
               Finish

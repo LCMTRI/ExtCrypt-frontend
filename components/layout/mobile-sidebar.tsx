@@ -2,8 +2,10 @@
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navItems } from "@/constants/data";
+import { NavLinks } from "@/constants/links";
 import { MenuIcon } from "lucide-react";
 import { useState } from "react";
+import { Icons } from "../icons";
 
 // import { Playlist } from "../data/playlists";
 
@@ -22,11 +24,20 @@ export function MobileSidebar({ className }: SidebarProps) {
         <SheetContent side="left" className="!px-0">
           <div className="space-y-4 py-4">
             <div className="px-3 py-2">
-              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+              {/* <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                 Overview
-              </h2>
+              </h2> */}
+              <div className="flex items-center px-4 mb-5">
+                <Icons.logo className="h-7 w-7 text-emerald-500" />
+                <span className="font-semibold text-lg text-emerald-500">
+                  Ext
+                </span>
+                <span className="font-semibold text-lg text-cyan-600">
+                  Crypt
+                </span>
+              </div>
               <div className="space-y-1">
-                <DashboardNav items={navItems} setOpen={setOpen} />
+                <DashboardNav items={NavLinks} setOpen={setOpen} />
               </div>
             </div>
           </div>

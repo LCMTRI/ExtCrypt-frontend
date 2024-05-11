@@ -1,3 +1,4 @@
+import DownloadButton from "@/components/buttons/download";
 import { Icons } from "@/components/icons";
 import Image from "next/image";
 import React from "react";
@@ -5,7 +6,7 @@ import React from "react";
 const HeroSection = () => {
   return (
     <div
-      className=" w-full py-28 px-44 flex items-center justify-between"
+      className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden"
       // style={{ padding: "7rem 11rem" }}
     >
       <div>
@@ -34,14 +35,15 @@ const HeroSection = () => {
             Ioncube alternative (free)
           </li>
         </ul>
+        <DownloadButton />
       </div>
 
       <Image
         src={"/hero2.svg"}
         alt=""
         width={350}
-        height={30}
-        className="mr-20 scale-x-[-1]"
+        height={350}
+        className="xl:mr-20 mr-0 lg:scale-x-[-1] lg:scale-y-[1] scale-x-[-1.5] scale-y-[1.5] lg:relative lg:bottom-0 lg:right-0 absolute -bottom-[10%] -right-[5%] z-0 lg:opacity-100 opacity-60"
       />
     </div>
   );

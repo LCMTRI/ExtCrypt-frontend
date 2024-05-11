@@ -3,7 +3,7 @@ import React from "react";
 const userFooter = () => {
   return (
     // <div className="w-full h-28 px-20 bg-gradient-to-r from-cyan-100 to-emerald-100 dark:from-cyan-900 dark:to-emerald-900 flex items-center justify-between text-md">
-    <div className="w-full h-28 px-20 bg-gradient-to-r from-cyan-300/30 to-emerald-300/30 flex items-center justify-between text-md">
+    <div className="w-full px-8 py-6 bg-gradient-to-r from-cyan-300/30 to-emerald-300/30 flex items-center justify-between text-[15px]">
       <span>
         Created by&nbsp;<span className="font-semibold">Le Cao Minh Tri</span>,
         2024.

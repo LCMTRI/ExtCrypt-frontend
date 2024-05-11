@@ -43,15 +43,11 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => router.push('/')}>
+            <DropdownMenuItem onClick={() => router.push("/")}>
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-            </DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
@@ -63,12 +59,14 @@ export function UserNav() {
     );
   } else {
     return (
-      <Button variant="outline" size="icon" className="flex gap-3" onClick={() => router.push('/signin')}>
+      <Button
+        variant="outline"
+        size="icon"
+        className="flex gap-3"
+        onClick={() => router.push("/signin")}
+      >
         <Icons.login className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
-        {/* <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" /> */}
-        {/* <span className="">Login</span> */}
-    </Button>
-    )
+      </Button>
+    );
   }
 }
