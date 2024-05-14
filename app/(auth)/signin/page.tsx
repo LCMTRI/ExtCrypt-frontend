@@ -20,7 +20,7 @@ export default async function AuthenticationPage() {
   }
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="z-[100] fixed px-8 py-6 top-0 right-0 flex sm:flex-col sm:items-end items-center justify-end w-full gap-2">
+      <div className="z-[100] fixed px-8 py-6 top-0 right-0 flex items-center sm:flex-col sm:items-end justify-end w-full gap-2">
         <BackToHomeButton />
         <ThemeToggle />
       </div>
