@@ -1,7 +1,6 @@
+import { _post } from "@/app/api/backend/api-client";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialProvider from "next-auth/providers/credentials";
-import { randomBytes } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   jwt: {
@@ -25,36 +24,36 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
-    CredentialProvider({
-      credentials: {
-        email: {
-          label: "email",
-          type: "email",
-          placeholder: "example@gmail.com",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-        },
-      },
-      async authorize(credentials, req) {
-        const user = {
-          id: "1",
-          name: "John",
-          email: credentials?.email,
-          password: credentials?.password,
-        };
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
+    // CredentialProvider({
+    //   credentials: {
+    //     email: {
+    //       label: "email",
+    //       type: "email",
+    //       placeholder: "example@gmail.com",
+    //     },
+    //     password: {
+    //       label: "Password",
+    //       type: "password",
+    //     },
+    //   },
+    //   async authorize(credentials, req) {
+    //     const user = {
+    //       id: "1",
+    //       name: "John",
+    //       email: credentials?.email,
+    //       password: credentials?.password,
+    //     };
+    //     if (user) {
+    //       // Any object returned will be saved in `user` property of the JWT
+    //       return user;
+    //     } else {
+    //       // If you return null then an error will be displayed advising the user to check their details.
+    //       return null;
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-        }
-      },
-    }),
+    //       // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+    //     }
+    //   },
+    // }),
   ],
   pages: {
     signIn: "/signin", //sigin page
@@ -73,6 +72,26 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken as string;
 
       return session;
+    },
+    async signIn({ user, account, profile }) {
+      if (account && account.provider === "google") {
+        // Extract user data
+        const { id_token: remember_token, userId: user_id } = account;
+        const { name, email } = user;
+
+        // Send user data and token to backend
+        await _post(
+          "/users/signin",
+          {
+            name: name,
+            email: email,
+            remember_token: remember_token,
+            user_id: user_id,
+          },
+          {},
+        );
+      }
+      return true;
     },
   },
 };

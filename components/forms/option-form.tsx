@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { InferType, boolean, mixed, object, string } from "yup";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import axios from "axios";
+import { _post } from "@/app/api/backend/api-client";
 
 const formSchema = object({
   maskAddress: boolean(),
@@ -67,15 +67,11 @@ const OptionForm = () => {
     bitStr += data.biosDate ? "1" : "0";
     bitStr += data.deviceName ? "1" : "0";
     result.append("values", bitStr);
-    const { data: res } = await axios.post(
-      "http://localhost:8000/form",
-      result,
-      {
-        headers: {
-          "Access-Control-Allow-Origin": "http://localhost:8000",
-        },
+    const { data: res } = await _post("http://localhost:8000/form", result, {
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:8000",
       },
-    );
+    });
     // const res = await axios.get("http://localhost:8000/health-check", {
     //   headers: {
     //     "Access-Control-Allow-Origin": "*",
