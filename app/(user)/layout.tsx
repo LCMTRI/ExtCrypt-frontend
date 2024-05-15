@@ -4,7 +4,7 @@ import UserHeader from "@/components/layout/user-header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Next Shadcn",
+  title: "Ext Crypt",
   description: "Basic dashboard with Next.js and Shadcn",
 };
 
