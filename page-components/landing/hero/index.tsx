@@ -1,13 +1,17 @@
-import { _get } from "@/app/api/backend/api-client";
+import { _post } from "@/app/api/backend/api-client";
 import DownloadButton from "@/components/buttons/download";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React from "react";
 
 const HeroSection = () => {
   const handleOnClick = async () => {
-    const { data: res } = await _get("/health-check");
+    const { data: res } = await _post("/health-check", {
+      name: "name",
+      email: "email",
+      remember_token: "remember_token",
+      user_id: "user_id",
+    });
     console.log("res: ", res);
   };
   return (
