@@ -15,10 +15,7 @@ const HeroSection = () => {
     console.log("res: ", res);
   };
   return (
-    <div
-      className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden"
-      // style={{ padding: "7rem 11rem" }}
-    >
+    <div className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden">
       <div className="z-10 back">
         <h1 className="font-medium tracking-tight text-4xl text-zinc-800 dark:text-zinc-100">
           Protect PHP Source Code
