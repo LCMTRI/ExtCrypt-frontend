@@ -6,7 +6,6 @@ const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    // You can add other headers like authorization token here
   },
 });
 
