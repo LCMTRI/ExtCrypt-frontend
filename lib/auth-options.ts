@@ -72,37 +72,37 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    async signIn({ user, account }) {
-      if (account && account.provider === "google" && user) {
-        // Extract user data
-        const { id_token: remember_token } = account;
-        const { name, email, id: user_id } = user;
-        // const user_id = profile?.sub;
+    // async signIn({ user, account }) {
+    //   if (account && account.provider === "google" && user) {
+    //     // Extract user data
+    //     const { id_token: remember_token } = account;
+    //     const { name, email, id: user_id } = user;
+    //     // const user_id = profile?.sub;
 
-        try {
-          const response = await _post(`/users/signin`, {
-            name,
-            email,
-            remember_token,
-            user_id,
-          });
-          if (response.status === 200) {
-            // Optionally handle the response if needed
-            console.log("User data sent to backend successfully");
-          } else {
-            console.error(
-              "Failed to send user data to backend",
-              response.status,
-            );
-            return false;
-          }
-        } catch (error) {
-          console.error("Error sending user data to backend", error);
-          return false;
-        }
-      }
-      return true;
-    },
+    //     try {
+    //       const response = await _post(`/users/signin`, {
+    //         name,
+    //         email,
+    //         remember_token,
+    //         user_id,
+    //       });
+    //       if (response.status === 200) {
+    //         // Optionally handle the response if needed
+    //         console.log("User data sent to backend successfully");
+    //       } else {
+    //         console.error(
+    //           "Failed to send user data to backend",
+    //           response.status,
+    //         );
+    //         return false;
+    //       }
+    //     } catch (error) {
+    //       console.error("Error sending user data to backend", error);
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // },
     // async signIn({ user, account }) {
     //   if (account && account.provider === "google" && user) {
     //     // Extract user data
