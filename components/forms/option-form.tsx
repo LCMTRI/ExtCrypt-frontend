@@ -67,7 +67,7 @@ const OptionForm = () => {
     bitStr += data.biosDate ? "1" : "0";
     bitStr += data.deviceName ? "1" : "0";
     result.append("values", bitStr);
-    const { data: res } = await _post("http://localhost:8000/form", result, {});
+    const { data: res } = await _post("/form", result, {});
     // const res = await axios.get("http://localhost:8000/health-check", {
     //   headers: {
     //     "Access-Control-Allow-Origin": "*",
