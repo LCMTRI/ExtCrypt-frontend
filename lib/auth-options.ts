@@ -72,8 +72,8 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    async signIn({ user, account, profile }) {
-      if (account && account.provider === "google") {
+    async signIn({ user, account }) {
+      if (account && account.provider === "google" && user) {
         // Extract user data
         const { id_token: remember_token } = account;
         const { name, email, id: user_id } = user;
