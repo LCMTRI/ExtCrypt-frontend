@@ -59,14 +59,13 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin", //sigin page
   },
   callbacks: {
-    async jwt({ token, account, user, profile }) {
-      // Persist the OAuth access_token and or the user id to the token right after signin
-      if (account) {
-        token.accessToken = account.id_token;
-        // token.accessToken = account.
-      }
-      return token;
-    },
+    // async jwt({ token, account, user, profile }) {
+    //   // Persist the OAuth access_token and or the user id to the token right after signin
+    //   if (account) {
+    //     token.accessToken = account.id_token;
+    //   }
+    //   return token;
+    // },
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken as string;
@@ -76,8 +75,9 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       if (account && account.provider === "google") {
         // Extract user data
-        const { id_token: remember_token, userId: user_id } = account;
-        const { name, email } = user;
+        const { id_token: remember_token } = account;
+        const { name, email, id: user_id } = user;
+        // const user_id = profile?.sub;
 
         // Send user data and token to backend
         await _post(
