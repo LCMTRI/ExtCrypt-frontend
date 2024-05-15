@@ -1,19 +1,25 @@
+import { _get } from "@/app/api/backend/api-client";
 import DownloadButton from "@/components/buttons/download";
 import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
 
 const HeroSection = () => {
+  const handleOnClick = async () => {
+    const { data: res } = await _get("/health-check");
+    console.log("res: ", res);
+  };
   return (
     <div
       className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden"
       // style={{ padding: "7rem 11rem" }}
     >
-      <div>
+      <div className="z-10 back">
         <h1 className="font-medium tracking-tight text-4xl text-zinc-800 dark:text-zinc-100">
           Protect PHP Source Code
         </h1>
-        <ul className="list-inside text-lg font-medium text-zinc-600 dark:text-zinc-200 mt-4 leading-8">
+        <ul className="list-inside text-lg font-medium text-zinc-600 dark:text-zinc-200 my-4 leading-8">
           <li className="flex gap-2.5 items-center">
             <Icons.check className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
             Encrypt and decrypt php source code.
@@ -30,12 +36,9 @@ const HeroSection = () => {
             <Icons.check className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
             Encode and run PHP files.
           </li>
-          <li className="flex gap-2.5 items-center">
-            <Icons.check className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            Ioncube alternative (free)
-          </li>
         </ul>
         <DownloadButton />
+        <Button onClick={handleOnClick}>Test</Button>
       </div>
 
       <Image
