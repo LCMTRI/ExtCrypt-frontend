@@ -5,15 +5,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const HeroSection = () => {
-  const handleOnClick = async () => {
-    const { data: res } = await _post("/health-check", {
-      name: "name",
-      email: "email",
-      remember_token: "remember_token",
-      user_id: "user_id",
-    });
-    console.log("res: ", res);
-  };
   return (
     <div className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden">
       <div className="z-10 back">
@@ -39,7 +30,6 @@ const HeroSection = () => {
           </li>
         </ul>
         <DownloadButton />
-        <Button onClick={handleOnClick}>Test</Button>
       </div>
 
       <Image

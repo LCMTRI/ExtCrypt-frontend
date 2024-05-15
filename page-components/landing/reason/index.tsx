@@ -34,7 +34,7 @@ const ReasonSection = () => {
       <span className="h-[2px] max-w-[400px] w-1/2 bg-cyan-600"></span>
       <div className="grid sm:grid-cols-3 grid-cols-1 lg:w-4/5 w-full gap-16 lg:gap-20">
         {reasons.map((el: ReasonEl, index: number) => (
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start" key={index}>
             {el.icon}
             <h1 className="text-xl font-semibold mt-6 mb-3">{el.title}</h1>
             <p>{el.content}</p>
