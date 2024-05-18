@@ -5,7 +5,7 @@ const BASE_URL = process.env.API_CLIENT || "http://localhost:8000";
 const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    // "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   },
 });

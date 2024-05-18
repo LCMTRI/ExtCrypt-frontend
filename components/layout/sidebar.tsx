@@ -1,5 +1,5 @@
 import { DashboardNav } from "@/components/dashboard-nav";
-import { NavLinks } from "@/constants/links";
+import { ManagementLinks } from "@/constants/links";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
@@ -8,10 +8,10 @@ export default function Sidebar() {
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="space-y-1">
-            <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
+            <h2 className="mb-5 px-4 text-xl font-semibold tracking-tight text-foreground/0">
               Overview
             </h2>
-            <DashboardNav items={NavLinks} />
+            <DashboardNav items={ManagementLinks} />
           </div>
         </div>
       </div>

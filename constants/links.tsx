@@ -16,6 +16,30 @@ export const NavLinks: Links[] = [
   },
   {
     name: "Key Options",
+    slug: "/key-options",
+    icon: "key",
+  },
+  {
+    name: "Contact",
+    slug: "/contact",
+    icon: "billing",
+  },
+  {
+    name: "Subscription",
+    slug: "/subscription",
+    icon: "laptop",
+  },
+];
+
+export const ManagementLinks: Links[] = [
+  {
+    name: "Tickets",
+    slug: "/me/tickets",
+    // icon: <Icons.home className="mr-2 h-4 w-4" />,
+    icon: "tag",
+  },
+  {
+    name: "Key Options",
     slug: "/keygen",
     icon: "key",
   },

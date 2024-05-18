@@ -1,11 +1,12 @@
-import OptionForm from "@/components/forms/option-form";
+import SrcCodeForm from "@/components/forms/src-code-form";
 import Link from "next/link";
+import React from "react";
 
-const KeygenPageComponent = () => {
+const UploadSrcCodePageComponent = () => {
   return (
     <div className="w-full h-full py-16 flex flex-col gap-20 items-center justify-center">
       <div className="flex flex-col text-center lg:mx-0 mx-10 gap-6">
-        <h1 className="inline-block text-4xl">Key Generation</h1>
+        <h1 className="inline-block text-4xl">Upload Source Code</h1>
         <span className="text-lg mx-auto lg:w-2/3 w-full px-8">
           Choose additional options to generate key the target local machine's
           informations.
@@ -14,18 +15,17 @@ const KeygenPageComponent = () => {
       <div className="px-20 py-2 w-full flex lg:flex-row flex-col-reverse gap-8">
         <div className="w-full py-8 px-12 border rounded">
           {/* <OptionsSection /> */}
-          <OptionForm />
+          <SrcCodeForm />
         </div>
         <div className="w-full py-8 px-12 border rounded hidden md:block">
           <h1 className="font-semibold text-2xl mb-8">Instructions</h1>
           <ol className=" list-decimal list-inside flex flex-col gap-3 text-lg leading-7">
             <li>
               <span>
-                Choose the options of the target machine's information you want
-                to get to generate the key.
+                Choose the options of the target machine you want to generate.
                 <br />
                 <span className=" text-gray-500 leading-9">
-                  (No options means source code can run on any machine)
+                  (No options chosen means source code can run on any machine)
                 </span>
               </span>
             </li>
@@ -45,17 +45,17 @@ const KeygenPageComponent = () => {
                 A ticket will also be created (visit{" "}
                 <Link
                   href={"/tickets"}
-                  className="underline underline-offset-1 text-cyan-700 hover:text-cyan-500 font-semibold"
+                  className="underline underline-offset-1 text-cyan-700"
                 >
-                  tickets
+                  user's tickets
                 </Link>{" "}
-                to check). Upload the file with generated key and your source
-                code in a <span className="font-semibold">.zip</span> file.
+                to check). Upload the key generated and your source code in a{" "}
+                <span className="font-semibold">.zip</span> file.
                 <br />{" "}
                 <span className="font-semibold text-red-500 leading-9">
-                  Remember:
+                  Remember:{" "}
                 </span>{" "}
-                Ticket will be expired in 24 hours.
+                Ticket will disappears in 24 hours.
               </span>
             </li>
           </ol>
@@ -65,4 +65,4 @@ const KeygenPageComponent = () => {
   );
 };
 
-export default KeygenPageComponent;
+export default UploadSrcCodePageComponent;

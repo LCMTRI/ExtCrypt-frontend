@@ -1,5 +1,4 @@
 import { _post } from "@/app/api/backend/api-client";
-import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -112,8 +111,8 @@ export const authOptions: NextAuthOptions = {
         // const user_id = profile?.sub;
 
         // Send user data and token to backend
-        const { data: res } = await axios.post(
-          "http://localhost:8000/users/signin",
+        const { data: res } = await _post(
+          "/users/signin",
           {
             name,
             email,

@@ -1,5 +1,6 @@
 "use client";
 
+import { _post } from "@/app/api/backend/api-client";
 import {
   Form,
   FormControl,
@@ -7,16 +8,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InferType, boolean, mixed, object, string } from "yup";
+import { InferType, boolean, object, string } from "yup";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import { _post } from "@/app/api/backend/api-client";
 
 const formSchema = object({
   maskAddress: boolean(),
@@ -27,13 +27,13 @@ const formSchema = object({
   biosDate: boolean(),
   deviceName: boolean(),
   // .matches(phoneRegExp, FALSE_PHONE_NUMBER_MSG),
-  zipFile: mixed<File>()
-    .required("You have to provide your source code!")
-    .test(
-      "fileFormat",
-      "Unsupported Format",
-      (value) => value && value.type == "application/x-zip-compressed",
-    ),
+  // zipFile: mixed<File>()
+  //   .required("You have to provide your source code!")
+  //   .test(
+  //     "fileFormat",
+  //     "Unsupported Format",
+  //     (value) => value && value.type == "application/x-zip-compressed",
+  //   ),
 
   id: string().notRequired(),
 });
@@ -41,6 +41,11 @@ const formSchema = object({
 type OptionSchema = InferType<typeof formSchema>;
 
 const OptionForm = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  if (!session) {
+    router.push("/signin");
+  }
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -57,23 +62,38 @@ const OptionForm = () => {
     //   zipFile: data.zipFile,
     // };
 
-    const result = new FormData();
+    // const result = new FormData();
     let bitStr = "";
 
-    result.append("files", data.zipFile);
+    // result.append("files", data.zipFile);
     bitStr += data.biosDate ? "1" : "0";
     bitStr += data.volumeSerial ? "1" : "0";
     bitStr += data.cpuId ? "1" : "0";
     bitStr += data.biosDate ? "1" : "0";
     bitStr += data.deviceName ? "1" : "0";
-    result.append("values", bitStr);
-    const { data: res } = await _post("/form", result, {});
-    // const res = await axios.get("http://localhost:8000/health-check", {
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // });
-    console.log("result: ", res);
+    setLoading(true);
+    // result.append("values", bitStr);
+    await _post("/options-submit", {
+      option_bit: bitStr,
+      email: session?.user?.email,
+    })
+      .then((res) => {
+        const blob = new Blob([res.data], {
+          type: res.headers["content-type"],
+        });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "install.php";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .finally(() => {
+        setLoading(false);
+        router.push("/key-options/success");
+      });
   };
 
   // const {
@@ -91,9 +111,9 @@ const OptionForm = () => {
         >
           <div className="max-w-screen flex flex-col gap-5 mb-12">
             <div>
-              <h1 className="font-semibold text-2xl mb-2">1. Options</h1>
+              <h1 className="font-semibold text-2xl mb-2">Options Form</h1>
               <span className="font-light text-base mb-8">
-                Enter optional informations to create a more secure key.
+                Enter optional informations to create a computer-specific key.
               </span>
             </div>
 
@@ -112,15 +132,11 @@ const OptionForm = () => {
                   <div className="text-base space-y-2 leading-none">
                     {/* <FormLabel className="space-y-1 leading-none"> */}
                     <FormLabel className="text-[17px]">
-                      Mask Address{" "}
+                      MAC Address{" "}
                       <span className="text-foreground/50">(Optional)</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
-                      You can manage your mobile notifications in the{" "}
-                      <span className="hover:underline cursor-pointer underline-offset-2">
-                        mobile settings
-                      </span>{" "}
-                      page.
+                      Ex: 00:1A:2B:3C:4D:5E
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -144,11 +160,7 @@ const OptionForm = () => {
                       <span className="text-foreground/50">(Optional)</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
-                      You can manage your mobile notifications in the{" "}
-                      <span className="hover:underline cursor-pointer underline-offset-2">
-                        mobile settings
-                      </span>{" "}
-                      page.
+                      Ex: 1A2B-3C4D
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -172,11 +184,7 @@ const OptionForm = () => {
                       <span className="text-foreground/50">(Optional)</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
-                      You can manage your mobile notifications in the{" "}
-                      <span className="hover:underline cursor-pointer underline-offset-2">
-                        mobile settings
-                      </span>{" "}
-                      page.
+                      Ex: BFEBFBFF000306A9
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -200,11 +208,7 @@ const OptionForm = () => {
                       <span className="text-foreground/50">(Optional)</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
-                      You can manage your mobile notifications in the{" "}
-                      <span className="hover:underline cursor-pointer underline-offset-2">
-                        mobile settings
-                      </span>{" "}
-                      page.
+                      Ex: 2023-08-12
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -228,11 +232,7 @@ const OptionForm = () => {
                       <span className="text-foreground/50">(Optional)</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
-                      You can manage your mobile notifications in the{" "}
-                      <span className="hover:underline cursor-pointer underline-offset-2">
-                        mobile settings
-                      </span>{" "}
-                      page.
+                      Ex: DESKTOP-7A6HRSI
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -240,7 +240,7 @@ const OptionForm = () => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <h1 className="font-semibold text-2xl mb-2">
               2. Upload Source Code
             </h1>
@@ -272,17 +272,17 @@ const OptionForm = () => {
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
 
           <div className="w-full flex justify-end mt-5">
             <Button
-              disabled={
-                loading || !form.formState.isDirty || !form.formState.isValid
-              }
+              // disabled={
+              //   loading || !form.formState.isDirty || !form.formState.isValid
+              // }
               className="px-8 bg-cyan-500/50 text-foreground text-base hover:bg-cyan-700/70"
               type="submit"
             >
-              Finish
+              Submit
             </Button>
           </div>
         </form>

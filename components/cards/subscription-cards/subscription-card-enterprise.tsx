@@ -48,9 +48,12 @@ export const SubscriptionCardEnterprise = () => {
           </li>
         </ul>
       </div>
-      <Button className="bg-cyan-400 dark:bg-cyan-700 hover:bg-cyan-500/70 dark:hover:bg-cyan-700/70 text-foreground px-8 py-6">
+      {/* <Button
+        disabled
+        className="bg-cyan-400 dark:bg-cyan-700 hover:bg-cyan-500/70 dark:hover:bg-cyan-700/70 text-foreground px-8 py-6"
+      >
         <h1 className="text-lg">Start Today</h1>
-      </Button>
+      </Button> */}
     </div>
   );
 };
