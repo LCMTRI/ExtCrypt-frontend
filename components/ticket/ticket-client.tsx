@@ -18,6 +18,7 @@ interface Ticket {
   user_id: string;
   option_bit: string;
   expire_date: Date;
+  created_at: Date;
 }
 
 const bitStrToOptions = (bitStr: string) => {
@@ -57,12 +58,6 @@ const TicketClient = () => {
   const router = useRouter();
   const [tickets, setTickets] = useState([]);
 
-  const fetchTickets = async () => {
-    const res = await _post("/tickets/get-all", {
-      email: session?.user?.email,
-    });
-    setTickets(res.data);
-  };
   useEffect(() => {
     const fetchTickets = async () => {
       const res = await _post("/tickets/get-all", {

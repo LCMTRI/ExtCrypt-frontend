@@ -111,16 +111,16 @@ export const authOptions: NextAuthOptions = {
         // const user_id = profile?.sub;
 
         // Send user data and token to backend
-        const { data: res } = await _post(
-          "/users/signin",
-          {
-            name,
-            email,
-            remember_token,
-            user_id,
-          },
-          {},
-        );
+        // const { data: res } = await _post(
+        //   "/users/signin",
+        //   {
+        //     name,
+        //     email,
+        //     remember_token,
+        //     user_id,
+        //   },
+        //   {},
+        // );
       }
       return true;
     },
