@@ -14,7 +14,6 @@ const UploadSrcCodePageComponent = () => {
       </div>
       <div className="px-20 py-2 w-full flex lg:flex-row flex-col-reverse gap-8">
         <div className="w-1/2 mx-auto py-8 px-12 border rounded">
-          {/* <OptionsSection /> */}
           <SrcCodeForm />
         </div>
         {/* <div className="w-full py-8 px-12 border rounded hidden md:block">
