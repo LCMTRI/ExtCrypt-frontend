@@ -13,11 +13,11 @@ const UploadSrcCodePageComponent = () => {
         </span>
       </div>
       <div className="px-20 py-2 w-full flex lg:flex-row flex-col-reverse gap-8">
-        <div className="w-full py-8 px-12 border rounded">
+        <div className="w-1/2 mx-auto py-8 px-12 border rounded">
           {/* <OptionsSection /> */}
           <SrcCodeForm />
         </div>
-        <div className="w-full py-8 px-12 border rounded hidden md:block">
+        {/* <div className="w-full py-8 px-12 border rounded hidden md:block">
           <h1 className="font-semibold text-2xl mb-8">Instructions</h1>
           <ol className=" list-decimal list-inside flex flex-col gap-3 text-lg leading-7">
             <li>
@@ -59,7 +59,7 @@ const UploadSrcCodePageComponent = () => {
               </span>
             </li>
           </ol>
-        </div>
+        </div> */}
       </div>
     </div>
   );

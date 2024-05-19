@@ -1,6 +1,7 @@
 "use client";
 
-import { _post } from "@/app/api/backend/api-client";
+import { _delete, _post } from "@/app/api/backend/api-client";
+import moment from "moment";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Icons } from "../icons";
@@ -16,9 +17,10 @@ import {
 interface Ticket {
   id: string;
   user_id: string;
+  user_email: string;
   option_bit: string;
-  expire_date: Date;
-  created_at: Date;
+  expire_date: string;
+  created_at: string;
 }
 
 const bitStrToOptions = (bitStr: string) => {
@@ -58,6 +60,21 @@ const TicketClient = () => {
   const router = useRouter();
   const [tickets, setTickets] = useState([]);
 
+  const deleteTicket = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string,
+  ) => {
+    event.stopPropagation();
+    await _delete(`/tickets/${id}`);
+    const fetchTickets = async () => {
+      const res = await _post("/tickets/get-all", {
+        email: session?.user?.email,
+      });
+      setTickets(res.data);
+    };
+    fetchTickets();
+  };
+
   useEffect(() => {
     const fetchTickets = async () => {
       const res = await _post("/tickets/get-all", {
@@ -71,17 +88,16 @@ const TicketClient = () => {
     <div className="grid lg:grid-cols-4 grid-cols-3 lg:gap-12 gap-4 h-fit">
       {tickets.map((ticket: Ticket, idx) => (
         <div
-          className="group rounded-lg border shadow-lg py-3 px-4 w-full h-fit cursor-pointer"
+          className="rounded-lg border shadow-lg py-3 px-4 w-full h-fit"
           key={idx}
-          onClick={() => router.push("/upload-src-code/" + ticket.id)}
         >
-          <div className="flex gap-4 mb-3">
+          <div className="flex gap-4 mb-3 justify-between">
             <h1 className="font-semibold text-sm line-clamp-1">{ticket.id}</h1>
             <div className="h-6 w-6">
               <Icons.tag className="text-cyan-600 h-5 w-5 bottom-0" />
             </div>
           </div>
-          <p className="flex gap-2 mb-1">
+          <p className="flex gap-2 mb-2">
             <div className="w-fit text-nowrap font-semibold">Options:</div>{" "}
             <TooltipProvider>
               <Tooltip>
@@ -96,23 +112,45 @@ const TicketClient = () => {
               </Tooltip>
             </TooltipProvider>
           </p>
-          <div className="flex gap-2 mb-3">
+          <div className="flex gap-2 mb-2">
             <div className="w-fit text-nowrap font-semibold">Created at:</div>{" "}
             <span className="text-ellipsis overflow-hidden">
-              {ticket.user_id}
+              {moment(ticket.created_at).format("MMMM Do YYYY, h:mm:ss a")}
             </span>
           </div>
+          {/* <div className="flex gap-2 mb-3">
+            <div className="text-nowrap font-semibold">Created by:</div>{" "}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-cyan-700 text-ellipsis overflow-hidden">
+                    {ticket.user_email}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span className="text-cyan-700">{ticket.user_email}</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div> */}
           <div className="w-full flex justify-between">
             <div
-              className="flex gap-1 items-center cursor-pointer underline-offset-2 group-hover:underline"
-              onClick={() => router.push("/")}
+              className="group flex gap-1 items-center cursor-pointer underline-offset-2 hover:underline text-cyan-600"
+              onClick={() => router.push("/upload-src-code/" + ticket.id)}
             >
               <span className="font-semibold bg-background z-30 py-2 sm:block hidden">
                 Upload code
               </span>
-              <Icons.arrowRight className=" group-hover:text-foreground w-4 h-4 z-20 sm:-translate-x-10 translate-x-0 group-hover:translate-x-0 duration-200" />
+              <Icons.arrowRight className="group-hover:text-cyan-600 w-4 h-4 z-20 sm:-translate-x-10 translate-x-0 group-hover:translate-x-0 duration-200" />
             </div>
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              size="icon"
+              className="z-10"
+              onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                deleteTicket(event, ticket.id)
+              }
+            >
               <Icons.trash className="text-red-500 h-4 w-4" />
             </Button>
           </div>

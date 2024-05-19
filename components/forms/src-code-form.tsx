@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Dialog } from "@radix-ui/react-dialog";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -20,6 +21,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { InferType, mixed, object, string } from "yup";
+import { DialogContent } from "../ui/dialog";
 
 const formSchema = object({
   password: string().required("This field is required"),
@@ -51,6 +53,7 @@ const SrcCodeForm = () => {
     router.push("/signin");
   }
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<UploadCodeSchema>({
@@ -66,6 +69,7 @@ const SrcCodeForm = () => {
     result.append("password", data.password);
     result.append("host", data.host);
     setLoading(true);
+    setOpen(true);
 
     await _post("/upload-code", result, {
       responseType: "blob",
@@ -90,6 +94,7 @@ const SrcCodeForm = () => {
       })
       .finally(() => {
         setLoading(false);
+        setOpen(false);
         router.push("/upload-src-code/success");
       });
   };
@@ -122,15 +127,10 @@ const SrcCodeForm = () => {
                     <div className="text-base space-y-2 leading-none">
                       {/* <FormLabel className="space-y-1 leading-none"> */}
                       <FormLabel className="text-[17px]">
-                        Password{" "}
-                        <span className="text-foreground/50">(Optional)</span>
+                        Password<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormDescription className="text-[15px] leading-5">
-                        You can manage your mobile notifications in the{" "}
-                        <span className="hover:underline cursor-pointer underline-offset-2">
-                          mobile settings
-                        </span>{" "}
-                        page.
+                        Enter your addtional secret password.
                       </FormDescription>
                       <FormControl>
                         <Input type="text" disabled={loading} {...field} />
@@ -147,15 +147,10 @@ const SrcCodeForm = () => {
                     <div className="text-base space-y-2 leading-none">
                       {/* <FormLabel className="space-y-1 leading-none"> */}
                       <FormLabel className="text-[17px]">
-                        Host{" "}
-                        <span className="text-foreground/50">(Optional)</span>
+                        Host<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormDescription className="text-[15px] leading-5">
-                        You can manage your mobile notifications in the{" "}
-                        <span className="hover:underline cursor-pointer underline-offset-2">
-                          mobile settings
-                        </span>{" "}
-                        page.
+                        Enter your host. Ex: localhost, example.com,...
                       </FormDescription>
                       <FormControl>
                         <Input type="text" disabled={loading} {...field} />
@@ -170,7 +165,7 @@ const SrcCodeForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-base">
-                      Key file<span className="text-red-500">*</span> :
+                      Key file<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
                       Upload your{" "}
@@ -200,7 +195,7 @@ const SrcCodeForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-base">
-                      Source code<span className="text-red-500">*</span> :
+                      Source code<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormDescription className="text-[15px] leading-5">
                       Compress your source code to a{" "}
@@ -234,18 +229,37 @@ const SrcCodeForm = () => {
               className="px-8 bg-cyan-500/50 text-foreground text-base hover:bg-cyan-700/70"
               type="submit"
             >
-              {loading ? (
+              {/* {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Please wait
                 </>
               ) : (
                 "Submit"
-              )}
+              )} */}
+              Submit
             </Button>
           </div>
         </form>
       </Form>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          {/* <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader> */}
+          <div className="flex flex-col gap-4 items-center justify-center">
+            <Loader2 className="mr-2 h-8 w-8 text-cyan-500 animate-spin" />
+            <div className="text-center">
+              Your source code is being encrypted.
+              <br />
+              Please wait. This might take a while...
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -19,16 +19,16 @@ export const NavLinks: Links[] = [
     slug: "/key-options",
     icon: "key",
   },
-  {
-    name: "Contact",
-    slug: "/contact",
-    icon: "billing",
-  },
-  {
-    name: "Subscription",
-    slug: "/subscription",
-    icon: "laptop",
-  },
+  // {
+  //   name: "Contact",
+  //   slug: "/contact",
+  //   icon: "billing",
+  // },
+  // {
+  //   name: "Subscription",
+  //   slug: "/subscription",
+  //   icon: "laptop",
+  // },
 ];
 
 export const ManagementLinks: Links[] = [
@@ -43,14 +43,14 @@ export const ManagementLinks: Links[] = [
     slug: "/keygen",
     icon: "key",
   },
-  {
-    name: "Contact",
-    slug: "/contact",
-    icon: "billing",
-  },
-  {
-    name: "Subscription",
-    slug: "/subscription",
-    icon: "laptop",
-  },
+  // {
+  //   name: "Contact",
+  //   slug: "/contact",
+  //   icon: "billing",
+  // },
+  // {
+  //   name: "Subscription",
+  //   slug: "/subscription",
+  //   icon: "laptop",
+  // },
 ];

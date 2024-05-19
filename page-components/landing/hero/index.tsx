@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full py-28 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden">
+    <div className="relative w-full py-16 xl:px-44 sm:px-32 px-6 flex items-center justify-between overflow-hidden">
       <div className="z-10 back">
         <h1 className="font-medium tracking-tight text-4xl text-zinc-800 dark:text-zinc-100">
           Protect PHP Source Code
@@ -26,7 +26,7 @@ const HeroSection = () => {
           </li>
           <li className="flex gap-2.5 items-center">
             <Icons.check className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            Encode and run PHP files.
+            Simple and easy to use.
           </li>
         </ul>
         <DownloadButton />
@@ -35,8 +35,8 @@ const HeroSection = () => {
       <Image
         src={"/hero2.svg"}
         alt=""
-        width={350}
-        height={350}
+        width={400}
+        height={400}
         className="xl:mr-20 mr-0 lg:scale-x-[-1] lg:scale-y-[1] scale-x-[-1.5] scale-y-[1.5] lg:relative lg:bottom-0 lg:right-0 absolute -bottom-[10%] -right-[5%] z-0 lg:opacity-100 opacity-60"
       />
     </div>

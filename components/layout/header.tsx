@@ -8,9 +8,9 @@ import { Icons } from "../icons";
 export default function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 supports-backdrop-blur:bg-background/60 border-b bg-background/95 backdrop-blur z-20">
-      <nav className="h-14 flex items-center justify-between px-4">
+      <nav className="flex items-center justify-between px-6 py-4">
         <div className="hidden lg:block">
-          <Link href={"/dashboard"} className="flex items-center">
+          <Link href={"/"} className="flex items-center">
             {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -23,8 +23,8 @@ export default function Header() {
             >
               <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
             </svg> */}
-            <Icons.logo className="relative mr-1 h-6 w-6 text-emerald-500" />
-            <div className="font-semibold">
+            <Icons.logo className="relative h-7 w-7 text-emerald-500" />
+            <div className="font-bold text-lg">
               <span className="text-emerald-500 mr-1">Ext</span>
               <span className=" text-cyan-600 dark:text-cyan-500">Crypt</span>
             </div>
@@ -34,7 +34,7 @@ export default function Header() {
           <MobileSidebar />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <UserNav />
           <ThemeToggle />
         </div>

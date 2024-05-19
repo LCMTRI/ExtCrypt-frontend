@@ -43,12 +43,18 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => router.push("/")}>
-              Profile
+            <DropdownMenuItem
+              className="font-semibold text-foreground/60"
+              onClick={() => router.push("/me/tickets")}
+            >
+              Tickets
             </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
+            <DropdownMenuItem
+              className="font-semibold text-foreground/60"
+              onClick={() => signOut({ callbackUrl: "/me/src-codes" })}
+            >
+              Source Codes
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/signin" })}>

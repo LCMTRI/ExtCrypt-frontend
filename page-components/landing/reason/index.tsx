@@ -9,18 +9,18 @@ type ReasonEl = {
 
 const reasons: ReasonEl[] = [
   {
-    title: "Advanced Protection",
-    content: "Generate a specific key for each customer.",
+    title: "Licensing",
+    content: "Generate key to run code on specific computers.",
     icon: <Icons.key className="h-9 w-9 text-emerald-500" />,
   },
   {
-    title: "Online Encryption",
-    content: "Encrypt source code from online also possible.",
+    title: "Advanced Encryption",
+    content: "Create code that is really hard to decrypt.",
     icon: <Icons.lock className="h-9 w-9 text-emerald-500" />,
   },
   {
-    title: "It's your code!",
-    content: "Prevent others to keep spreading your valuable source code",
+    title: "Copyright",
+    content: "Prevent others from spreading your valuable source code.",
     icon: <Icons.checkCircle className="h-9 w-9 text-emerald-500" />,
   },
 ];

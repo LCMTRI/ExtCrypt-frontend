@@ -31,18 +31,14 @@ const KeygenSuccessPageComponent = () => {
           </li>
           <li>
             <span>
-              Get the key in <span className="font-semibold">hwid.txt</span>
+              Receive <span className="font-semibold">hwid.txt</span> which
+              contains the key.
             </span>
           </li>
           <li>
             <span>
-              Go to{" "}
-              <Link
-                href={"/upload-src-code"}
-                className="text-cyan-700 font-semibold underline underline-offset-2 cursor-pointer hover:opacity-80"
-              >
-                /upload-source-code
-              </Link>
+              Upload source code and{" "}
+              <span className="font-semibold">hwid.txt</span> on created ticket.
             </span>
           </li>
         </ul>
