@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { useToast } from "../ui/use-toast";
 
 interface Ticket {
   id: string;
@@ -58,6 +59,7 @@ const bitStrToOptions = (bitStr: string) => {
 const TicketClient = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const { toast } = useToast();
   const [tickets, setTickets] = useState([]);
 
   const deleteTicket = async (
@@ -66,6 +68,10 @@ const TicketClient = () => {
   ) => {
     event.stopPropagation();
     await _delete(`/tickets/${id}`);
+    toast({
+      title: "Delete ticket successfully",
+      description: "A ticket has been removed.",
+    });
     const fetchTickets = async () => {
       const res = await _post("/tickets/get-all", {
         email: session?.user?.email,
