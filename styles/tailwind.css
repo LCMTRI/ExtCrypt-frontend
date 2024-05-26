@@ -845,6 +845,14 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
 .mb-8 {
   margin-bottom: 2rem;
 }
@@ -1153,6 +1161,10 @@ body {
   width: 1rem;
 }
 
+.w-40 {
+  width: 10rem;
+}
+
 .w-5 {
   width: 1.25rem;
 }
@@ -1230,6 +1242,10 @@ body {
   width: 100%;
 }
 
+.min-w-24 {
+  min-width: 6rem;
+}
+
 .min-w-\[300px\] {
   min-width: 300px;
 }
@@ -1240,6 +1256,14 @@ body {
 
 .min-w-\[var\(--radix-select-trigger-width\)\] {
   min-width: var(--radix-select-trigger-width);
+}
+
+.max-w-40 {
+  max-width: 10rem;
+}
+
+.max-w-52 {
+  max-width: 13rem;
 }
 
 .max-w-\[400px\] {
@@ -1617,8 +1641,16 @@ body {
   white-space: pre-wrap;
 }
 
+.text-wrap {
+  text-wrap: wrap;
+}
+
 .text-nowrap {
   text-wrap: nowrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .rounded {
@@ -2028,11 +2060,6 @@ body {
   padding-bottom: 6rem;
 }
 
-.py-28 {
-  padding-top: 7rem;
-  padding-bottom: 7rem;
-}
-
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -2322,6 +2349,10 @@ body {
 
 .text-foreground\/50 {
   color: hsl(var(--foreground) / 0.5);
+}
+
+.text-foreground\/60 {
+  color: hsl(var(--foreground) / 0.6);
 }
 
 .text-foreground\/70 {
@@ -2731,6 +2762,11 @@ body {
   background-color: hsl(var(--accent));
 }
 
+.hover\:bg-cyan-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(6 182 212 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-cyan-500\/50:hover {
   background-color: rgb(6 182 212 / 0.5);
 }
@@ -2812,10 +2848,6 @@ body {
 
 .hover\:opacity-100:hover {
   opacity: 1;
-}
-
-.hover\:opacity-80:hover {
-  opacity: 0.8;
 }
 
 .focus\:bg-accent:focus {
@@ -2930,12 +2962,13 @@ body {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.group:hover .group-hover\:text-foreground {
-  color: hsl(var(--foreground));
+.group:hover .group-hover\:text-cyan-600 {
+  --tw-text-opacity: 1;
+  color: rgb(8 145 178 / var(--tw-text-opacity));
 }
 
-.group:hover .group-hover\:underline {
-  text-decoration-line: underline;
+.group:hover .group-hover\:text-foreground {
+  color: hsl(var(--foreground));
 }
 
 .group:hover .group-hover\:opacity-100 {
