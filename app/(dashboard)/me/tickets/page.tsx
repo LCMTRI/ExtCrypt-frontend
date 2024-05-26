@@ -1,5 +1,5 @@
 import BreadCrumb from "@/components/breadcrumb";
-import TicketClient from "@/components/ticket/ticket-client";
+import { TicketClient } from "@/components/ticket";
 
 const breadcrumbItems = [{ title: "Tickets", link: "/dashboard/tickets" }];
 const page = () => {

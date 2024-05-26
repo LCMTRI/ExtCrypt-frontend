@@ -51,7 +51,7 @@ export function UserNav() {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="font-semibold text-foreground/60"
-              onClick={() => signOut({ callbackUrl: "/me/src-codes" })}
+              onClick={() => router.push("/me/src-codes")}
             >
               Source Codes
             </DropdownMenuItem>

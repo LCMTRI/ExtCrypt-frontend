@@ -29,7 +29,7 @@ const ReasonSection = () => {
   return (
     <div className="h-fit w-full bg-background flex flex-col items-center lg:px-40 px-8 py-24 gap-16">
       <h1 className=" font-medium tracking-tight text-4xl text-center">
-        Why do you need encryption for php?
+        Why do you need to encrypt php codes with ExtCrypt?
       </h1>
       <span className="h-[2px] max-w-[400px] w-1/2 bg-cyan-600"></span>
       <div className="grid sm:grid-cols-3 grid-cols-1 lg:w-4/5 w-full gap-16 lg:gap-20">

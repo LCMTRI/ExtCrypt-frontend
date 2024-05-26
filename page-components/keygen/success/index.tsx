@@ -1,8 +1,14 @@
+"use client";
+
 import { Icons } from "@/components/icons";
+import KeygenSuccessButtons from "@/components/supportings/keygen-success-buttons";
 import Link from "next/link";
+import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
 
 const KeygenSuccessPageComponent = () => {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("created-ticket-id");
   return (
     <div className="w-full lg:h-[calc(100vh-175px)] sm:h-[calc(100vh-165px)] h-screen flex flex-col gap-5 items-center justify-center">
       <Icons.info className="text-cyan-500 w-16 h-16" />
@@ -12,14 +18,7 @@ const KeygenSuccessPageComponent = () => {
           File <span className="font-semibold">install.php</span> has been
           successfully downloaded.
           <br />
-          Your ticket has also been created (visit{" "}
-          <Link
-            href={"/me/tickets"}
-            className="text-cyan-700 underline underline-offset-2 hover:text-cyan-500 font-semibold"
-          >
-            tickets
-          </Link>
-          ).
+          Your ticket has also been created.
         </span>
         <br /> You are half-way done. Please continue to follow these steps:
         <ul className=" list-inside list-disc">
@@ -42,6 +41,8 @@ const KeygenSuccessPageComponent = () => {
             </span>
           </li>
         </ul>
+        <br />
+        {id && <KeygenSuccessButtons id={id} />}
       </div>
     </div>
   );

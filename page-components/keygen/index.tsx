@@ -5,10 +5,10 @@ const KeygenPageComponent = () => {
   return (
     <div className="w-full h-full py-16 flex flex-col gap-20 items-center justify-center">
       <div className="flex flex-col text-center lg:mx-0 mx-10 gap-6">
-        <h1 className="inline-block text-4xl">Key Generation</h1>
+        <h1 className="inline-block text-4xl">Key Generation Options</h1>
         <span className="text-lg mx-auto lg:w-2/3 w-full px-8">
-          Choose additional options to generate key the target local machine's
-          informations.
+          Choose additional options to generate key with the target machine's
+          hardware informations.
         </span>
       </div>
       <div className="px-20 py-2 w-full flex lg:flex-row flex-col-reverse gap-8">

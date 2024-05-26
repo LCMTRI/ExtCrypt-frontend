@@ -14,49 +14,21 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { useToast } from "../ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { bitStrToOptions } from "@/utils/helper-functions";
+import { Ticket } from "@/types";
 
-interface Ticket {
-  id: string;
-  user_id: string;
-  user_email: string;
-  option_bit: string;
-  expire_date: string;
-  created_at: string;
-}
-
-const bitStrToOptions = (bitStr: string) => {
-  if (bitStr.length != 5) {
-    return "";
-  }
-  let res = "";
-  let havePrev = false;
-  if (bitStr[0] == "1") {
-    res += "Mask Address";
-    havePrev = true;
-  }
-  if (bitStr[1] == "1") {
-    res += havePrev ? ", Volume Serial" : "Volume Serial";
-    havePrev = true;
-  }
-  if (bitStr[2] == "1") {
-    res += havePrev ? ", CPU Id" : "CPU Id";
-    havePrev = true;
-  }
-  if (bitStr[3] == "1") {
-    res += havePrev ? ", BIOS Activate Date" : "BIOS Activate Date";
-    havePrev = true;
-  }
-  if (bitStr[4] == "1") {
-    res += havePrev ? ", Device Name" : "Device Name";
-    havePrev = true;
-  }
-  if (bitStr === "00000") {
-    res = "No option";
-  }
-  return res;
-};
-
-const TicketClient = () => {
+export const TicketClient = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
@@ -89,7 +61,7 @@ const TicketClient = () => {
       setTickets(res.data);
     };
     fetchTickets();
-  }, [session]);
+  }, []);
   return tickets ? (
     <div className="grid lg:grid-cols-4 grid-cols-3 lg:gap-12 gap-4 h-fit">
       {tickets.map((ticket: Ticket, idx) => (
@@ -98,7 +70,18 @@ const TicketClient = () => {
           key={idx}
         >
           <div className="flex gap-4 mb-3 justify-between">
-            <h1 className="font-semibold text-sm line-clamp-1">{ticket.id}</h1>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <h1 className="font-semibold text-sm line-clamp-1">
+                    {ticket.id}
+                  </h1>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <h1>{ticket.id}</h1>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <div className="h-6 w-6">
               <Icons.tag className="text-cyan-600 h-5 w-5 bottom-0" />
             </div>
@@ -124,21 +107,6 @@ const TicketClient = () => {
               {moment(ticket.created_at).format("MMMM Do YYYY, h:mm:ss a")}
             </span>
           </div>
-          {/* <div className="flex gap-2 mb-3">
-            <div className="text-nowrap font-semibold">Created by:</div>{" "}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="text-cyan-700 text-ellipsis overflow-hidden">
-                    {ticket.user_email}
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <span className="text-cyan-700">{ticket.user_email}</span>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div> */}
           <div className="w-full flex justify-between">
             <div
               className="group flex gap-1 items-center cursor-pointer underline-offset-2 hover:underline text-cyan-600"
@@ -149,16 +117,33 @@ const TicketClient = () => {
               </span>
               <Icons.arrowRight className="group-hover:text-cyan-600 w-4 h-4 z-20 sm:-translate-x-10 translate-x-0 group-hover:translate-x-0 duration-200" />
             </div>
-            <Button
-              variant="outline"
-              size="icon"
-              className="z-10"
-              onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                deleteTicket(event, ticket.id)
-              }
-            >
-              <Icons.trash className="text-red-500 h-4 w-4" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" size="icon" className="z-10">
+                  <Icons.trash className="text-red-500 h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the ticket and you will not be able to continue step 2 with
+                    this ticket.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                      deleteTicket(event, ticket.id)
+                    }
+                  >
+                    Confirm
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       ))}
@@ -170,5 +155,3 @@ const TicketClient = () => {
     </div>
   );
 };
-
-export default TicketClient;

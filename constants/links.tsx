@@ -35,13 +35,12 @@ export const ManagementLinks: Links[] = [
   {
     name: "Tickets",
     slug: "/me/tickets",
-    // icon: <Icons.home className="mr-2 h-4 w-4" />,
     icon: "tag",
   },
   {
-    name: "Key Options",
-    slug: "/keygen",
-    icon: "key",
+    name: "Source Codes",
+    slug: "/me/src-codes",
+    icon: "post",
   },
   // {
   //   name: "Contact",

@@ -43,9 +43,6 @@ type OptionSchema = InferType<typeof formSchema>;
 const OptionForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  if (!session) {
-    router.push("/signin");
-  }
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -54,15 +51,11 @@ const OptionForm = () => {
   });
 
   const onSubmit = async (data: OptionSchema) => {
-    // const result: {
-    //   bitStr: string;
-    //   zipFile: File;
-    // } = {
-    //   bitStr: "",
-    //   zipFile: data.zipFile,
-    // };
-
-    // const result = new FormData();
+    // redirect when submit form without login
+    if (!session) {
+      router.push("/signin");
+      return;
+    }
     let bitStr = "";
 
     // result.append("files", data.zipFile);
@@ -73,7 +66,12 @@ const OptionForm = () => {
     bitStr += data.deviceName ? "1" : "0";
     setLoading(true);
     // result.append("values", bitStr);
-    await _post("/options-submit", {
+    const { data: id } = await _post("/tickets", {
+      option_bit: bitStr,
+      email: session?.user?.email,
+    });
+    console.log("created id: ", id);
+    await _post("/options", {
       option_bit: bitStr,
       email: session?.user?.email,
     })
@@ -92,7 +90,7 @@ const OptionForm = () => {
       })
       .finally(() => {
         setLoading(false);
-        router.push("/key-options/success");
+        router.push(`/key-options/success?created-ticket-id=${id}`);
       });
   };
 

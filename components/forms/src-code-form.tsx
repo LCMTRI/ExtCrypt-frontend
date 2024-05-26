@@ -1,6 +1,6 @@
 "use client";
 
-import { _get, _post } from "@/app/api/backend/api-client";
+import { _delete, _get, _post, _put } from "@/app/api/backend/api-client";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,18 +15,25 @@ import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Dialog } from "@radix-ui/react-dialog";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InferType, mixed, object, string } from "yup";
+import { InferType, date, mixed, object, string } from "yup";
 import { DialogContent } from "../ui/dialog";
+import { Checkbox } from "../ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import moment from "moment";
 
 const formSchema = object({
+  sourceName: string().required("This field is required"),
   password: string().required("This field is required"),
-  // ticketId: string().required("This field is required"),
   host: string().required("This field is required"),
+  expireDate: date().required("This field is required"),
   zipFile: mixed<File>()
     .required("You have to provide your source code!")
     .test(
@@ -45,10 +52,17 @@ const formSchema = object({
 
 type UploadCodeSchema = InferType<typeof formSchema>;
 
-const SrcCodeForm = () => {
-  const { ticketId } = useParams<{ ticketId: string }>();
+const SrcCodeForm = ({
+  optionBit,
+  ticketId,
+}: {
+  optionBit: string;
+  ticketId: string;
+}) => {
   const { data: session } = useSession();
   const router = useRouter();
+  // const [fileContent, setFileContent] = useState<string>("");
+
   if (!session) {
     router.push("/signin");
   }
@@ -62,14 +76,23 @@ const SrcCodeForm = () => {
 
   const onSubmit = async (data: UploadCodeSchema) => {
     const result = new FormData();
+    var key = "";
 
     result.append("code", data.zipFile);
     result.append("hwid", data.hwidFile);
-    result.append("ticketId", ticketId);
+    result.append("optionBit", optionBit);
     result.append("password", data.password);
     result.append("host", data.host);
+    result.append("expireDate", moment(data.expireDate).format("YYYYMMDD"));
     setLoading(true);
     setOpen(true);
+
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const content = e.target?.result as string;
+      if (content) key = content;
+    };
+    reader.readAsText(data.hwidFile);
 
     await _post("/upload-code", result, {
       responseType: "blob",
@@ -84,7 +107,6 @@ const SrcCodeForm = () => {
         a.style.display = "none";
         a.href = url;
         a.download = data.zipFile.name;
-
         document.body.appendChild(a);
         a.click();
 
@@ -92,18 +114,25 @@ const SrcCodeForm = () => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       })
-      .finally(() => {
+      .finally(async () => {
+        console.log("key: ", key);
+        await _post("/src-codes", {
+          user_email: session?.user?.email,
+          src_name: data.sourceName,
+          password: data.password,
+          host: data.host,
+          key: key,
+          option_bit: optionBit,
+          expire_date: data.expireDate.toISOString(),
+        });
+        await _delete(`/tickets/${ticketId}`);
+        await _put(`/users/${session?.user?.email}`);
         setLoading(false);
         setOpen(false);
         router.push("/upload-src-code/success");
       });
   };
 
-  // const {
-  //   form: { register, handleSubmit, reset },
-  //   isError,
-  //   getErrorMessage,
-  // } = useFormContact();
   return (
     <div>
       <Form {...form}>
@@ -119,6 +148,26 @@ const SrcCodeForm = () => {
               <span className="font-semibold">.zip</span> file.
             </div>
             <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="sourceName"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="text-base space-y-2 leading-none">
+                      {/* <FormLabel className="space-y-1 leading-none"> */}
+                      <FormLabel className="text-[17px]">
+                        Project name<span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormDescription className="text-[15px] leading-5">
+                        Enter project name.
+                      </FormDescription>
+                      <FormControl>
+                        <Input type="text" disabled={loading} {...field} />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="password"
@@ -154,6 +203,52 @@ const SrcCodeForm = () => {
                       </FormDescription>
                       <FormControl>
                         <Input type="text" disabled={loading} {...field} />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="expireDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="text-base space-y-2 leading-none">
+                      {/* <FormLabel className="space-y-1 leading-none"> */}
+                      <FormLabel className="text-[17px]">
+                        Expire date<span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormDescription className="text-[15px] leading-5">
+                        Enter the date that this source code no longer be
+                        distributed.
+                      </FormDescription>
+                      <FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                       </FormControl>
                     </div>
                   </FormItem>
@@ -218,6 +313,21 @@ const SrcCodeForm = () => {
                   </FormItem>
                 )}
               />
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 mt-2">
+                <FormControl>
+                  <Checkbox
+                    // checked={field.value}
+                    // onCheckedChange={field.onChange}
+                    disabled={loading}
+                  />
+                </FormControl>
+                <div className="text-sm space-y-2 leading-none">
+                  <FormLabel>
+                    <span className="text-foreground/60">(Optional)</span>{" "}
+                    Obfuscate source code before encrypting.
+                  </FormLabel>
+                </div>
+              </FormItem>
             </div>
           </div>
 
@@ -260,6 +370,7 @@ const SrcCodeForm = () => {
           </div>
         </DialogContent>
       </Dialog>
+      {/* <button onClick={() => setOpen(true)}>haha</button> */}
     </div>
   );
 };

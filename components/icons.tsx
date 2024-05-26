@@ -42,6 +42,7 @@ import {
   ArchiveX,
   ArchiveXIcon,
   PackageXIcon,
+  XCircle,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -126,6 +127,8 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   checkCircle: CheckCircle,
+  checkCircle2: CheckCircle2,
+  xCircle: XCircle,
   lock: LockKeyhole,
   readMore: PlaneTakeoffIcon,
 };
