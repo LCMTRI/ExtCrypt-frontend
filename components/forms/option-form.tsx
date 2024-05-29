@@ -71,10 +71,16 @@ const OptionForm = () => {
       email: session?.user?.email,
     });
     console.log("created id: ", id);
-    await _post("/options", {
-      option_bit: bitStr,
-      email: session?.user?.email,
-    })
+    await _post(
+      "/options",
+      {
+        option_bit: bitStr,
+        email: session?.user?.email,
+      },
+      {
+        responseType: "blob",
+      },
+    )
       .then((res) => {
         const blob = new Blob([res.data], {
           type: res.headers["content-type"],
@@ -83,7 +89,7 @@ const OptionForm = () => {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = "install.php";
+        a.download = "install.zip";
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);

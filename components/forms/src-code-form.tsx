@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InferType, date, mixed, object, string } from "yup";
+import { InferType, boolean, date, mixed, object, string } from "yup";
 import { DialogContent } from "../ui/dialog";
 import { Checkbox } from "../ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -34,6 +34,7 @@ const formSchema = object({
   password: string().required("This field is required"),
   host: string().required("This field is required"),
   expireDate: date().required("This field is required"),
+  obfuscate: boolean(),
   zipFile: mixed<File>()
     .required("You have to provide your source code!")
     .test(
@@ -115,7 +116,6 @@ const SrcCodeForm = ({
         document.body.removeChild(a);
       })
       .finally(async () => {
-        console.log("key: ", key);
         await _post("/src-codes", {
           user_email: session?.user?.email,
           src_name: data.sourceName,
@@ -313,21 +313,27 @@ const SrcCodeForm = ({
                   </FormItem>
                 )}
               />
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 mt-2">
-                <FormControl>
-                  <Checkbox
-                    // checked={field.value}
-                    // onCheckedChange={field.onChange}
-                    disabled={loading}
-                  />
-                </FormControl>
-                <div className="text-sm space-y-2 leading-none">
-                  <FormLabel>
-                    <span className="text-foreground/60">(Optional)</span>{" "}
-                    Obfuscate source code before encrypting.
-                  </FormLabel>
-                </div>
-              </FormItem>
+              <FormField
+                control={form.control}
+                name="obfuscate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 mt-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <div className="text-sm space-y-2 leading-none">
+                      <FormLabel>
+                        <span className="text-foreground/60">(Optional)</span>{" "}
+                        Obfuscate source code before encrypting.
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
