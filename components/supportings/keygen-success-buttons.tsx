@@ -9,13 +9,13 @@ const KeygenSuccessButtons = ({ id }: { id: string }) => {
   return (
     <div className="flex gap-8 mx-auto">
       <Button
-        className="w-40 bg-cyan-600 hover:bg-cyan-500"
+        className="bg-cyan-600 hover:bg-cyan-500"
         onClick={() => router.push(`/upload-src-code/${id}`)}
       >
         Upload source code
       </Button>
       <Button
-        className="w-40 bg-cyan-600 hover:bg-cyan-500"
+        className="bg-cyan-600 hover:bg-cyan-500"
         onClick={() => router.push("/me/tickets")}
       >
         See all tickets
