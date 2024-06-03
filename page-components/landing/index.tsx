@@ -11,7 +11,7 @@ const LandingPageComponent = () => {
       <HeroSection />
       <ReasonSection />
       <SampleSection />
-      <GuideSection />
+      {/* <GuideSection /> */}
     </div>
   );
 };
