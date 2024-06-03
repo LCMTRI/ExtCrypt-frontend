@@ -33,7 +33,7 @@ export default function MeSourceCodePageComponent({
   const { data: session } = useSession();
 
   const [user, setUser] = useState<GoogleUser>();
-  const [srcCodes, setSrcCodes] = useState();
+  const [srcCodes, setSrcCodes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   var pageCount = 0;
@@ -71,7 +71,7 @@ export default function MeSourceCodePageComponent({
 
         <div className="flex items-start justify-between">
           <Heading
-            title={`Source Codes (${user ? user.num_of_src : ""})`}
+            title={`Source Codes (${srcCodes.length})`}
             description="View distributing source codes informations."
           />
         </div>
@@ -82,7 +82,7 @@ export default function MeSourceCodePageComponent({
           pageNo={page}
           columns={columns}
           totalUsers={user ? user.num_of_src : 0}
-          data={srcCodes ?? []}
+          data={srcCodes}
           loading={loading}
           pageCount={pageCount}
         />
