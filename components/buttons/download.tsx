@@ -8,7 +8,9 @@ import { Download } from "lucide-react";
 const DownloadButton = () => {
   const { data: session } = useSession();
   const handleDownload = async () => {
-    const res = await _get("/extension");
+    const res = await _get("/extension", {
+      responseType: "blob",
+    });
     const blob = new Blob([res.data], { type: res.headers["content-type"] });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
