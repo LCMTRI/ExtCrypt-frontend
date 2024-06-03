@@ -1,3 +1,4 @@
+import DownloadButton from "@/components/buttons/download";
 import { Icons } from "@/components/icons";
 import React, { ReactNode } from "react";
 

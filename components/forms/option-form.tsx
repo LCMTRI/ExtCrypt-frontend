@@ -65,22 +65,14 @@ const OptionForm = () => {
     bitStr += data.biosDate ? "1" : "0";
     bitStr += data.deviceName ? "1" : "0";
     setLoading(true);
-    // result.append("values", bitStr);
     const { data: id } = await _post("/tickets", {
       option_bit: bitStr,
       email: session?.user?.email,
     });
-    console.log("created id: ", id);
-    await _post(
-      "/options",
-      {
-        option_bit: bitStr,
-        email: session?.user?.email,
-      },
-      {
-        responseType: "blob",
-      },
-    )
+    await _post("/options", {
+      option_bit: bitStr,
+      email: session?.user?.email,
+    })
       .then((res) => {
         const blob = new Blob([res.data], {
           type: res.headers["content-type"],
@@ -89,7 +81,7 @@ const OptionForm = () => {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = "install.zip";
+        a.download = "install.php";
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);

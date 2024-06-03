@@ -1,5 +1,6 @@
 "use client";
 
+import GuideSection from "./guide";
 import HeroSection from "./hero";
 import ReasonSection from "./reason";
 import SampleSection from "./sample";
@@ -10,6 +11,7 @@ const LandingPageComponent = () => {
       <HeroSection />
       <ReasonSection />
       <SampleSection />
+      <GuideSection />
     </div>
   );
 };
