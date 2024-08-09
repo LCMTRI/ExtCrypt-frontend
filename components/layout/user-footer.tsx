@@ -10,7 +10,7 @@ const userFooter = () => {
       </span>
       <div className="flex flex-col text-sm items-end font-semibold">
         <span>Ho Chi Minh University of Technology</span>
-        <span>Graduation Thesis</span>
+        <span>Graduation Project</span>
       </div>
     </div>
   );
